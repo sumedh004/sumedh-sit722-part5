@@ -1,7 +1,7 @@
 version: '3'
 services:
   book_catalog:
-    image: book_catalog:v1
+    image: $CONTAINER_REGISTRY/book_catalog:$VERSION
     build: 
       context: ./book_catalog
       dockerfile: Dockerfile
@@ -13,7 +13,7 @@ services:
     restart: "no"
 
   inventory_management:
-    image: inventory_management:v1
+    image: $CONTAINER_REGISTRY/inventory_management:$VERSION
     build: 
       context: ./inventory_management
       dockerfile: Dockerfile
