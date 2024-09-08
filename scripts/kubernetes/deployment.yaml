@@ -1,1 +1,87 @@
-# Your Solution
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-catalog-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-catalog
+  template:
+    metadata:
+      labels:
+        app: book-catalog
+    spec:
+      containers: 
+      - name: book-catalog
+        image: sumedhpart4.azurecr.io/book_catalog:v1
+ 
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DATABASE_URL
+          value: postgresql://sumedh_yihc_user:0USewE9IXa3NMXCQpwqn0U0feEXeHiLn@dpg-cr7gk7rqf0us73bfbkag-a.oregon-postgres.render.com/sumedh_yihc
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-catalog-service
+spec:
+  selector:
+    app: book-catalog
+  type: LoadBalancer
+  ports:
+    - port: 4001
+      targetPort: 5000
+
+
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-management-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-management
+  template:
+    metadata:
+      labels:
+        app: inventory-management
+    spec:
+      containers: 
+      - name: inventory-management
+        image: sumedhpart4.azurecr.io/inventory_management:v1
+ 
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+        env:
+        - name: DATABASE_URL
+          value: postgresql://sumedh_yihc_user:0USewE9IXa3NMXCQpwqn0U0feEXeHiLn@dpg-cr7gk7rqf0us73bfbkag-a.oregon-postgres.render.com/sumedh_yihc
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-management-service
+spec:
+  selector:
+    app: inventory-management
+  type: LoadBalancer
+  ports:
+    - port: 4002
+      targetPort: 5001
+ 
