@@ -65,6 +65,10 @@ jobs:
           base64-kube-config: ${{ env.KUBECONFIG_CONTENT }}
           kubectl-version: v1.30.3
 
+        run: |
+
+          echo "KUBECONFIG_CONTENT=" >> $GITHUB_ENV
+
       - name: Get Container Registry Name
         working-directory: ./scripts/terraform
         run: |
