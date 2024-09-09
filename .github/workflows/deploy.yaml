@@ -49,11 +49,7 @@ jobs:
         working-directory: ./scripts/terraform
         run: terraform apply -auto-approve
 
-      - name: Debug Terraform Output for Registry Name
-        working-directory: ./scripts/terraform
-        run: |
-          terraform output -raw registry_name
-          terraform output registry_name
+
 
 
 
@@ -63,7 +59,7 @@ jobs:
       - name: Get Container Registry Name
         working-directory: ./scripts/terraform
         run: |
-          CONTAINER_REGISTRY=$(terraform output -raw registry_name)
+          CONTAINER_REGISTRY=$(terraform output registry_name | sed 's/^"//;s/"$//')
           echo $CONTAINER_REGISTRY
           echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
 
@@ -90,7 +86,6 @@ jobs:
         working-directory: ./scripts/terraform
         run: |
           KUBECONFIG_CONTENT=$(terraform output -raw kube_config | base64 -w 0)
-          # echo "KUBECONFIG_CONTENT=$KUBECONFIG_CONTENT" >> $GITHUB_ENV
           echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
           echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
