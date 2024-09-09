@@ -61,8 +61,8 @@ jobs:
         run: |
           sleep 20
           CONTAINER_REGISTRY=$(terraform output registry_name | awk -F'"' '{print $2}')
-          echo "CONTAINER_REGISTRY=${ CONTAINER_REGISTRY }" 
-          echo "CONTAINER_REGISTRY=${ CONTAINER_REGISTRY }" >> $GITHUB_ENV
+          echo "CONTAINER_REGISTRY=${CONTAINER_REGISTRY}" 
+          echo "CONTAINER_REGISTRY=${CONTAINER_REGISTRY}" >> $GITHUB_ENV
 
 
 
