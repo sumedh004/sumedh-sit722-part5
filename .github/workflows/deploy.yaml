@@ -1,0 +1,92 @@
+name: Deploy library microservice to kubernetes
+
+on:
+
+  push: 
+    branches:
+      - main
+
+
+  workflow_dispatch: 
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+    
+    env:
+      VERSION: ${{ github.sha }}
+
+    steps:
+      - name: checkout code
+      - uses: actions/checkout@v3
+
+      - name: setup azure login
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}   
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
+          
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      - name: terraform init
+        run: terraform init
+
+      - name: terraform plan
+        run: terraform plan
+
+      - name: terraform apply
+        run: terraform apply -auto-approve
+
+
+      - name: Get Kubernetes Config
+        id: get-kubeconfig
+        run: |
+        KUBECONFIG_CONTENT=$(terraform output -raw kube_config)
+        echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
+        echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+      
+      - name: Set up kubectl
+        uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ secrets.KUBECONFIG_CONTENT }}
+          kubectl-version: v1.30.3
+
+      - name: Get Container Registry Name
+        run: |
+        CONTAINER_REGISTRY=$(terraform output -raw registry_name)
+        echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
+
+
+
+      - name: Login to Azure Container Registry
+        run: |
+        echo ${{ secrets.CLIENT_SECRET }} | docker login $CONTAINER_REGISTRY.azurecr.io -u ${{ secrets.CLIENT_ID }} --password-stdin
+
+      - name: Build Docker images
+        env:
+          CONTAINER_REGISTRY: $CONTAINER_REGISTRY
+          VERSION: ${{ github.sha }}
+          run: ./scripts/build-image.sh
+
+
+      - name: Push Docker images
+        env:
+          CONTAINER_REGISTRY: $CONTAINER_REGISTRY
+          VERSION: ${{ github.sha }}
+          run: ./scripts/push-image.sh
+
+
+
+      - name: Deploy Docker images
+        env:
+          CONTAINER_REGISTRY: $CONTAINER_REGISTRY
+          VERSION: ${{ github.sha }}
+          run: ./scripts/deploy.sh
+
+      
