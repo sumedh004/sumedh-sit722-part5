@@ -52,15 +52,16 @@ jobs:
 
       - name: Get Kubernetes Config
         run: |
-          KUBECONFIG_CONTENT=$(terraform output -raw kube_config)
-          echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
-          echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          KUBECONFIG_CONTENT=$(terraform output -raw kube_config | base64 -w 0)
+          echo "KUBECONFIG_CONTENT=$KUBECONFIG_CONTENT" >> $GITHUB_ENV
+          # echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
+          # echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
+          # echo "EOF" >> $GITHUB_ENV
       
       - name: Set up kubectl
         uses: tale/kubectl-action@v1
         with:
-          base64-kube-config: ${{ secrets.KUBECONFIG_CONTENT }}
+          base64-kube-config: ${{ env.KUBECONFIG_CONTENT }}
           kubectl-version: v1.30.3
 
       - name: Get Container Registry Name
