@@ -59,7 +59,8 @@ jobs:
       - name: Get Container Registry Name
         working-directory: ./scripts/terraform
         run: |
-          CONTAINER_REGISTRY=$(terraform output registry_name | sed 's/^"//;s/"$//')
+          sleep 20
+          CONTAINER_REGISTRY=$(terraform output -raw registry_name)
           echo $CONTAINER_REGISTRY
           echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
 
