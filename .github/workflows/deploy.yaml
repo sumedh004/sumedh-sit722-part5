@@ -2,9 +2,9 @@ name: Deploy library microservice to kubernetes
 
 on:
 
-  # push: 
-  #   branches:
-  #     - main
+  push: 
+    branches:
+      - main
 
 
   workflow_dispatch: 
@@ -21,10 +21,10 @@ jobs:
 
     steps:
       - name: checkout code
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: setup azure login
-      - uses: azure/login@v2
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}   
