@@ -50,34 +50,22 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Debug Terraform Output for Registry Name
+        working-directory: ./scripts/terraform
         run: |
           terraform output -raw registry_name
           terraform output registry_name
 
 
-      - name: Get Kubernetes Config
-        working-directory: ./scripts/terraform
-        run: |
-          KUBECONFIG_CONTENT=$(terraform output -raw kube_config | base64 -w 0)
-          # echo "KUBECONFIG_CONTENT=$KUBECONFIG_CONTENT" >> $GITHUB_ENV
-          echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
-          echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-      
-      - name: Set up kubectl
-        uses: tale/kubectl-action@v1
-        with:
-          base64-kube-config: ${{ env.KUBECONFIG_CONTENT }}
-          kubectl-version: v1.30.3
+
 
 
 
       - name: Get Container Registry Name
         working-directory: ./scripts/terraform
         run: |
-          CONTAINER_REGISTRY=$(terraform output registry_name)
-          echo "Container Registry: ${CONTAINER_REGISTRY}"
-          echo "CONTAINER_REGISTRY=${CONTAINER_REGISTRY}" >> $GITHUB_ENV
+          CONTAINER_REGISTRY=$(terraform output -raw registry_name)
+          echo $CONTAINER_REGISTRY
+          echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
 
 
 
@@ -98,6 +86,20 @@ jobs:
           VERSION: ${{ github.sha }}
         run: ./scripts/push-image.sh
 
+      - name: Get Kubernetes Config
+        working-directory: ./scripts/terraform
+        run: |
+          KUBECONFIG_CONTENT=$(terraform output -raw kube_config | base64 -w 0)
+          # echo "KUBECONFIG_CONTENT=$KUBECONFIG_CONTENT" >> $GITHUB_ENV
+          echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
+          echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      
+      - name: Set up kubectl
+        uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ env.KUBECONFIG_CONTENT }}
+          kubectl-version: v1.30.3
 
       - name: Deploy Docker images
         env:
