@@ -1,7 +1,7 @@
 version: '3'
 services:
   book_catalog:
-    image: $CONTAINER_REGISTRY/book_catalog:$VERSION
+    image: $CONTAINER_REGISTRY.azurecr.io/book_catalog:$VERSION
     build: 
       context: ./book_catalog
       dockerfile: Dockerfile
@@ -9,11 +9,11 @@ services:
     ports:
      - "4001:5000"
     environment:
-      - DATABASE_URL=postgresql://sumedh_yihc_user:0USewE9IXa3NMXCQpwqn0U0feEXeHiLn@dpg-cr7gk7rqf0us73bfbkag-a.oregon-postgres.render.com/sumedh_yihc
+      - DATABASE_URL=postgresql://sumedhpart5_user:4YSRqUaWffzs1Wz5NO2zthypKg6zrwwW@dpg-crfatsbgbbvc73c1kbo0-a.oregon-postgres.render.com/sumedhpart5
     restart: "no"
 
   inventory_management:
-    image: $CONTAINER_REGISTRY/inventory_management:$VERSION
+    image: $CONTAINER_REGISTRY.azurecr.io/inventory_management:$VERSION
     build: 
       context: ./inventory_management
       dockerfile: Dockerfile
@@ -21,5 +21,5 @@ services:
     ports:
      - "4002:5001"
     environment:
-      - DATABASE_URL=postgresql://sumedh_yihc_user:0USewE9IXa3NMXCQpwqn0U0feEXeHiLn@dpg-cr7gk7rqf0us73bfbkag-a.oregon-postgres.render.com/sumedh_yihc
+      - DATABASE_URL=postgresql://sumedhpart5_user:4YSRqUaWffzs1Wz5NO2zthypKg6zrwwW@dpg-crfatsbgbbvc73c1kbo0-a.oregon-postgres.render.com/sumedhpart5
     restart: "no"

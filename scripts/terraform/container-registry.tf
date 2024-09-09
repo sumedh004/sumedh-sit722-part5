@@ -7,5 +7,5 @@ resource "azurerm_container_registry" "container_registry" {
 }
 
 output "registry_name" {
-  value = azurerm_container_registry.container_registry.login_server
+  value = azurerm_container_registry.container_registry.name
 }
