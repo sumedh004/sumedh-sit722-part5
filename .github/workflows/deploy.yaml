@@ -46,10 +46,10 @@ jobs:
       - name: Get Kubernetes Config
         id: get-kubeconfig
         run: |
-        KUBECONFIG_CONTENT=$(terraform output -raw kube_config)
-        echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
-        echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
+          KUBECONFIG_CONTENT=$(terraform output -raw kube_config)
+          echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
+          echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
       
       - name: Set up kubectl
         uses: tale/kubectl-action@v1
@@ -59,14 +59,14 @@ jobs:
 
       - name: Get Container Registry Name
         run: |
-        CONTAINER_REGISTRY=$(terraform output -raw registry_name)
-        echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
+          CONTAINER_REGISTRY=$(terraform output -raw registry_name)
+          echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
 
 
 
       - name: Login to Azure Container Registry
         run: |
-        echo ${{ secrets.CLIENT_SECRET }} | docker login $CONTAINER_REGISTRY.azurecr.io -u ${{ secrets.CLIENT_ID }} --password-stdin
+          echo ${{ secrets.CLIENT_SECRET }} | docker login $CONTAINER_REGISTRY.azurecr.io -u ${{ secrets.CLIENT_ID }} --password-stdin
 
       - name: Build Docker images
         env:
