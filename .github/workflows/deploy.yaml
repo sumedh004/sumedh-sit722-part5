@@ -2,9 +2,9 @@ name: Deploy library microservice to kubernetes
 
 on:
 
-  push: 
-    branches:
-      - main
+  # push: 
+  #   branches:
+  #     - main
 
 
   workflow_dispatch: 
