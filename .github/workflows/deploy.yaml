@@ -46,7 +46,6 @@ jobs:
 
 
       - name: Get Kubernetes Config
-        id: get-kubeconfig
         run: |
           KUBECONFIG_CONTENT=$(terraform output -raw kube_config)
           echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
@@ -74,14 +73,14 @@ jobs:
         env:
           CONTAINER_REGISTRY: $CONTAINER_REGISTRY
           VERSION: ${{ github.sha }}
-          run: ./scripts/build-image.sh
+        run: ./scripts/build-image.sh
 
 
       - name: Push Docker images
         env:
           CONTAINER_REGISTRY: $CONTAINER_REGISTRY
           VERSION: ${{ github.sha }}
-          run: ./scripts/push-image.sh
+        run: ./scripts/push-image.sh
 
 
 
@@ -89,6 +88,6 @@ jobs:
         env:
           CONTAINER_REGISTRY: $CONTAINER_REGISTRY
           VERSION: ${{ github.sha }}
-          run: ./scripts/deploy.sh
+        run: ./scripts/deploy.sh
 
       
