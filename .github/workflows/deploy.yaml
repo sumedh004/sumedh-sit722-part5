@@ -64,17 +64,15 @@ jobs:
           echo $CONTAINER_REGISTRY
           echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" 
 
-          echo "CONTAINER_REGISTRY<<EOF" >> $GITHUB_ENV
+          echo "CONTAINER_REGISTRY=" >> $GITHUB_ENV
           echo "$CONTAINER_REGISTRY" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
 
-          # echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
 
 
 
       - name: Login to Azure Container Registry
         run: |
-          echo ${{ secrets.CLIENT_SECRET }} | docker login $CONTAINER_REGISTRY -u ${{ secrets.CLIENT_ID }} --password-stdin
+          echo ${{ secrets.CLIENT_SECRET }} | docker login ${{CONTAINER_REGISTRY}} -u ${{ secrets.CLIENT_ID }} --password-stdin
 
       - name: Build Docker images
         env:
