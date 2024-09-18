@@ -1,5 +1,5 @@
 variable "app_name" {
-  default = "sumedhpart5"
+  default = "sumedhpart6"
 }
 
 variable "location" {
