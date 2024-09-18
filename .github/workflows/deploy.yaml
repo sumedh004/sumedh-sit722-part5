@@ -59,7 +59,6 @@ jobs:
       - name: Get Container Registry Name
         working-directory: ./scripts/terraform
         run: |
-          sleep 20
           CONTAINER_REGISTRY=$(terraform-bin output -raw registry_name)
           echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
 
@@ -98,11 +97,9 @@ jobs:
       - name: Get Kubernetes Config
         working-directory: ./scripts/terraform
         run: |
-          KUBECONFIG_CONTENT=$(terraform output -raw kube_config | base64 -w 0)
-          echo "KUBECONFIG_CONTENT<<EOF" >> $GITHUB_ENV
-          echo "$KUBECONFIG_CONTENT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-      
+          KUBECONFIG_CONTENT=$(terraform-bin output -raw kube_config)
+          echo "KUBECONFIG_CONTENT=$KUBECONFIG_CONTENT" >> $GITHUB_ENV
+
       - name: Set up kubectl
         uses: tale/kubectl-action@v1
         with:
