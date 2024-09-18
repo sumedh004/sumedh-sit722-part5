@@ -60,8 +60,11 @@ jobs:
         working-directory: ./scripts/terraform
         run: |
           sleep 20
-          CONTAINER_REGISTRY=$(terraform output registry_name | sed 's/"//g')
+          CONTAINER_REGISTRY=$(terraform-bin output -raw registry_name)
           echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
+
+
+
 
 
 
