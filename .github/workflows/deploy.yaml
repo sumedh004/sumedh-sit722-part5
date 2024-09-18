@@ -15,8 +15,6 @@ permissions:
 
 jobs:
 
-
-
   deploy:
     runs-on: ubuntu-latest
     
@@ -51,20 +49,11 @@ jobs:
 
 
 
-
-
-
-
-
       - name: Get Container Registry Name
         working-directory: ./scripts/terraform
         run: |
           CONTAINER_REGISTRY=$(terraform-bin output -raw registry_name)
           echo "CONTAINER_REGISTRY=$CONTAINER_REGISTRY" >> $GITHUB_ENV
-
-
-
-
 
 
 
