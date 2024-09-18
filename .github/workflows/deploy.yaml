@@ -73,6 +73,15 @@ jobs:
         run: |
           echo ${{ secrets.CLIENT_SECRET }} | docker login ${{ env.CONTAINER_REGISTRY }}.azurecr.io -u ${{ secrets.CLIENT_ID }} --password-stdin
 
+
+      - name: Make sh files executable
+        working-directory: ./scripts/
+        run: |
+          chmod +x build-image.sh
+          chmod +x push-image.sh
+          chmod +x deploy.sh
+          chmod +x delete.sh
+
       - name: Build Docker images
         env:
           CONTAINER_REGISTRY: $CONTAINER_REGISTRY
