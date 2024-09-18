@@ -83,14 +83,14 @@ jobs:
 
       - name: Build Docker images
         env:
-          CONTAINER_REGISTRY: $CONTAINER_REGISTRY
+          CONTAINER_REGISTRY: ${{ env.CONTAINER_REGISTRY }}
           VERSION: ${{ github.sha }}
         run: ./scripts/build-image.sh
 
 
       - name: Push Docker images
         env:
-          CONTAINER_REGISTRY: $CONTAINER_REGISTRY
+          CONTAINER_REGISTRY: ${{ env.CONTAINER_REGISTRY }}
           VERSION: ${{ github.sha }}
         run: ./scripts/push-image.sh
 
@@ -108,7 +108,7 @@ jobs:
 
       - name: Deploy Docker images
         env:
-          CONTAINER_REGISTRY: $CONTAINER_REGISTRY
+          CONTAINER_REGISTRY: ${{ env.CONTAINER_REGISTRY }}
           VERSION: ${{ github.sha }}
         run: ./scripts/deploy.sh
 

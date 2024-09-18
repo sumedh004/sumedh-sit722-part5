@@ -14,7 +14,7 @@ spec:
     spec:
       containers: 
       - name: book-catalog
-        image: ${{ env.CONTAINER_REGISTRY }}.azurecr.io/book_catalog:$VERSION
+        image: $CONTAINER_REGISTRY.azurecr.io/book_catalog:$VERSION
  
         imagePullPolicy: IfNotPresent
         ports:
@@ -60,7 +60,7 @@ spec:
     spec:
       containers: 
       - name: inventory-management
-        image: ${{ env.CONTAINER_REGISTRY }}.azurecr.io/inventory_management:$VERSION
+        image: $CONTAINER_REGISTRY.azurecr.io/inventory_management:$VERSION
  
         imagePullPolicy: IfNotPresent
         ports:
